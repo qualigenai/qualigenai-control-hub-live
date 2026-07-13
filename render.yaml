@@ -1,12 +1,10 @@
-@"
-services:
+﻿services:
   - type: web
     name: qualigenai-control-hub
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run qualigenai-central-hub/app/dashboard/hub.py --server.port `$PORT --server.address 0.0.0.0
+    startCommand: streamlit run qualigenai-central-hub/app/dashboard/hub.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
-"
