@@ -1,0 +1,79 @@
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+
+# =========================
+# Virtual Environments
+# =========================
+.venv/
+venv/
+env/
+
+# =========================
+# Python Cache Files
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# =========================
+# Test / Coverage Reports
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Build / Distribution
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# AI Reliability Reports
+# =========================
+reports/json/*.json
+reports/html/*.html
+reports/temp/
+
+# =========================
+# Evidence / Logs
+# =========================
+evidence/
+logs/
+*.log
+
+# =========================
+# IDE / Editor Files
+# =========================
+.idea/
+.vscode/
+
+# =========================
+# OS Generated Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Secrets / Keys
+# =========================
+secrets/
+*.pem
+*.key
+
+# =========================
+# Temporary Files
+# =========================
+temp/
+tmp/

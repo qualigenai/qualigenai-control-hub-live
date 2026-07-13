@@ -1,0 +1,15 @@
+Hybrid RAG v1.5 Architecture
+
+Hybrid RAG combines semantic vector search with keyword-based BM25 search.
+
+Vector search helps find semantically similar content based on meaning. BM25 helps find exact keyword matches. Combining both improves retrieval quality because the system can find both meaning-based and keyword-based matches.
+
+The key components of the RAG v1.5 system are document ingestion, chunking, embeddings, ChromaDB vector store, hybrid retriever, language model, response generation, and source citation.
+
+ChromaDB is used as a vector database to store embeddings and retrieve relevant document chunks.
+
+The system reduces hallucination risk by grounding answers in retrieved context from uploaded documents. If the answer is not available in the knowledge base, the system should say that the information is not available instead of inventing an answer.
+
+The system cannot guarantee 100 percent accurate answers. It can reduce risk using retrieval grounding, citation validation, and hallucination testing.
+
+The system can support CI/CD integration by running reliability validation tests before deployment. If hallucination score is below the quality threshold, the deployment should be blocked.

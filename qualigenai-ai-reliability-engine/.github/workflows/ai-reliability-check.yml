@@ -1,0 +1,54 @@
+name: AI Reliability Engine Check
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  reliability-engine-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate golden dataset JSON
+        run: |
+          python -m json.tool datasets/rag_v1_5_tests/golden_dataset.json
+
+      - name: Compile Python files
+        run: |
+          python -m compileall app run_tests.py
+
+      - name: Check required files exist
+        run: |
+          test -f app/config.py
+          test -f app/connectors/auth_connector.py
+          test -f app/connectors/rag_v1_5_connector.py
+          test -f app/evaluators/basic_response_evaluator.py
+          test -f app/evaluators/scoring_engine.py
+          test -f app/reports/html_report_generator.py
+          test -f datasets/rag_v1_5_tests/golden_dataset.json
+          test -f run_tests.py
+
+      - name: Summary
+        run: |
+          echo "AI Reliability Engine static checks passed."
+          echo "Full RAG integration test requires local RAG API to be running."
