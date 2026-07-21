@@ -70,28 +70,20 @@ def build_summary(results: list) -> dict:
     }
 
 
-def main():
-    print("====================================================")
-    print(Settings.PROJECT_NAME)
-    print("====================================================")
-    print(f"System Under Test: {Settings.SYSTEM_UNDER_TEST}")
-    print(f"Execution Mode   : {Settings.EXECUTION_MODE}")
-    print(f"Base URL         : {Settings.get_base_url()}")
-    print(f"Query Endpoint   : {Settings.RAG_QUERY_ENDPOINT}")
-
+def run_reliability_suite() -> dict:
+    """
+    Runs the full reliability suite and returns a result dict.
+    Used by both the CLI (main()) and the new API service (api.py).
+    """
     connector = RAGV15Connector()
     evaluator = BasicResponseEvaluator()
-    html_generator = HTMLReportGenerator()
 
     print("\nChecking connector health...")
     health = connector.health_check()
     print(json.dumps(health, indent=2))
 
     if health.get("status") == "failed":
-        print("\nWARNING: Health check failed.")
-        print("Check whether your local RAG app is running at:")
-        print(Settings.get_base_url())
-        return
+        return {"ok": False, "error": "Health check failed.", "health_check": health}
 
     test_cases = load_test_cases()
     results = []
@@ -127,6 +119,29 @@ def main():
         "health_check": health,
         "results": results
     }
+    return {"ok": True, "report": report}
+
+
+def main():
+    print("====================================================")
+    print(Settings.PROJECT_NAME)
+    print("====================================================")
+    print(f"System Under Test: {Settings.SYSTEM_UNDER_TEST}")
+    print(f"Execution Mode   : {Settings.EXECUTION_MODE}")
+    print(f"Base URL         : {Settings.get_base_url()}")
+    print(f"Query Endpoint   : {Settings.RAG_QUERY_ENDPOINT}")
+
+    outcome = run_reliability_suite()
+
+    if not outcome["ok"]:
+        print("\nWARNING: Health check failed.")
+        print("Check whether your local RAG app is running at:")
+        print(Settings.get_base_url())
+        return
+
+    report = outcome["report"]
+    summary = report["summary"]
+    html_generator = HTMLReportGenerator()
 
     save_json_report(report)
     html_generator.generate(report, str(Settings.HTML_REPORT_PATH))
