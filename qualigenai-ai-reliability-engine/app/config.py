@@ -11,7 +11,7 @@ class Settings:
 
     SYSTEM_UNDER_TEST = "Hybrid RAG v1.5"
 
-    EXECUTION_MODE = "local_api"
+    EXECUTION_MODE = os.getenv("EXECUTION_MODE", "local_api")
 
     LOCAL_RAG_BASE_URL = "http://127.0.0.1:8000"
 

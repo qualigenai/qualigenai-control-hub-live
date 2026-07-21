@@ -1,10 +1,64 @@
 ﻿services:
   - type: web
-    name: qualigenai-control-hub
+    name: qualigenai-observability-platform
     env: python
     plan: free
+    rootDir: ai-observability-platform
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run qualigenai-central-hub/app/dashboard/hub.py --server.port $PORT --server.address 0.0.0.0
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
+      - key: INTERNAL_API_KEY
+        sync: false
+
+  - type: web
+    name: qualigenai-reliability-engine
+    env: python
+    plan: free
+    rootDir: qualigenai-ai-reliability-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: INTERNAL_API_KEY
+        sync: false
+      - key: EXECUTION_MODE
+        value: production_api
+
+  - type: web
+    name: qualigenai-guardrails-platform
+    env: python
+    plan: free
+    rootDir: ai-guardrails-platform
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: INTERNAL_API_KEY
+        sync: false
+
+  - type: web
+    name: qualigenai-control-hub
+    env: python
+    plan: free
+    rootDir: qualigenai-central-hub
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app/dashboard/hub.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: INTERNAL_API_KEY
+        sync: false
+      - key: RELIABILITY_ENGINE_URL
+        value: https://qualigenai-reliability-engine.onrender.com
+      - key: GUARDRAILS_PLATFORM_URL
+        value: https://qualigenai-guardrails-platform.onrender.com
+      - key: OBSERVABILITY_API_URL
+        value: https://qualigenai-observability-platform.onrender.com
+      - key: RAG_SYSTEM_URL
+        value: https://rag-system-api-v2.onrender.com
+      - key: PILGRIM_BOT_URL
+        value: https://srisailam-pilgrim-bot-1.onrender.com
