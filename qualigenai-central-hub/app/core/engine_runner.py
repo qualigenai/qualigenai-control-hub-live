@@ -1,10 +1,5 @@
 import json
-import subprocess
 import requests
-from pathlib import Path
-import duckdb
-import uuid
-
 
 def run_reliability_engine(service_url: str, internal_key: str) -> dict:
     """
@@ -38,10 +33,6 @@ def run_guardrails_platform(service_url: str, internal_key: str) -> dict:
         return response.json()
     except requests.RequestException as e:
         return {"ok": False, "error": f"Could not reach guardrails platform service: {e}"}
-
-import duckdb
-import uuid
-
 
 def run_pilgrim_bot_reliability(service_url: str, internal_key: str) -> dict:
     """
